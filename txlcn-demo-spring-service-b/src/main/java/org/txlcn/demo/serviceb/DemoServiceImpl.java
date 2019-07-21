@@ -1,16 +1,18 @@
 package org.txlcn.demo.serviceb;
 
-import com.codingapi.txlcn.common.util.Transactions;
-import com.codingapi.txlcn.tc.annotation.DTXPropagation;
-import com.codingapi.txlcn.tc.annotation.TxcTransaction;
-import com.codingapi.txlcn.tracing.TracingContext;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.txlcn.demo.common.db.domain.Demo;
 
-import java.util.Date;
+import com.codingapi.txlcn.common.util.Transactions;
+import com.codingapi.txlcn.tc.annotation.DTXPropagation;
+import com.codingapi.txlcn.tc.annotation.TxcTransaction;
+import com.codingapi.txlcn.tracing.TracingContext;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Description:
@@ -33,8 +35,6 @@ public class DemoServiceImpl implements DemoService {
     @TxcTransaction(propagation = DTXPropagation.SUPPORTS)
     @Transactional
     public String rpc(String value) {
-
-
         Demo demo = new Demo();
         demo.setGroupId(TracingContext.tracing().groupId());
         demo.setDemoField(value);

@@ -36,8 +36,10 @@ public class DemoServiceImpl implements DemoService {
     }
 
     @Override
-    @TccTransaction(propagation = DTXPropagation.SUPPORTS)
     @Transactional
+    @TccTransaction(propagation = DTXPropagation.SUPPORTS,
+    				confirmMethod="confirmRpc",
+    				cancelMethod="cancelRpc")
     public String rpc(String value) {
         Demo demo = new Demo();
         demo.setDemoField(value);
@@ -53,6 +55,7 @@ public class DemoServiceImpl implements DemoService {
     public void confirmRpc(String value) {
         ids.get(TracingContext.tracing().groupId()).forEach(id -> {
             log.info("tcc-confirm-{}-{}" + TracingContext.tracing().groupId(), id);
+//            int i = 1/0;
             ids.get(TracingContext.tracing().groupId()).remove(id);
         });
     }
@@ -60,6 +63,7 @@ public class DemoServiceImpl implements DemoService {
     public void cancelRpc(String value) {
         ids.get(TracingContext.tracing().groupId()).forEach(id -> {
             log.info("tcc-cancel-{}-{}", TracingContext.tracing().groupId(), id);
+//            int i = 1/0;
             demoMapper.deleteByKId(id);
         });
     }
